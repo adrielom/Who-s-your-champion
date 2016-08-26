@@ -11,6 +11,7 @@ public class InitiativeBar : MonoBehaviour {
     public float speedMod, playerTempIncreaseSpeed, oponentTempIncreaseSpeed;
     public GameObject button;
     public int turn = 0;
+    public int totalOfTurns;
 
     void Awake () {
         if (instance == null)
@@ -18,14 +19,13 @@ public class InitiativeBar : MonoBehaviour {
     }
 
     void Start () {
+        totalOfTurns = 1;
         playerTempIncreaseSpeed = 1;
         oponentTempIncreaseSpeed = 1;
         CheckingFirstToMove ();
     }
 
     void Update () {
-
-        print ("TURN: "+turn);
 
         if (turn != 0) {
             Initiative ();
@@ -57,7 +57,8 @@ public class InitiativeBar : MonoBehaviour {
 
     public void CastingEffectPlayer (Slider p, bool m) {
 
-        if (p.value >= 80 && m == false) {
+        if (p.value >= 80  && p.value <= 81 && m == false) {
+            ResettingCharacterValues (Player.instance.player);
             turn = 0;
             button.SetActive (true);
           
@@ -66,19 +67,25 @@ public class InitiativeBar : MonoBehaviour {
             button.SetActive (false);
             playerTempIncreaseSpeed = 2;
             turn = 1;
+            if (totalOfTurns >= 2) {
+                ButtonCards.instance.cardNamePlayer = ButtonCards.instance.playerCards.RandomCards ();
+            }   
         }
         else if (p.value > p.minValue && p.value < 1) {
             Player.instance.player.canMove = false;
             playerTempIncreaseSpeed = 1;
         }
         if (ButtonCards.instance.playerCards != null && p.value == p.minValue) {
-            ButtonCards.instance.playerCards.GetCardEffect (Player.instance.player, Oponent.instance.oponent, ButtonCards.instance.cardName);
+            ButtonCards.instance.CallingPlayerCardEffect ();
+            print ("BITCH " +Player.instance.playerCard);
+            totalOfTurns++;
         }
     }
 
     public void CastingEffectOponent (Slider p, bool m) {
         
         if (p.value >= 80 && p.value < 80.2f && m == false) {
+            ResettingCharacterValues (Oponent.instance.oponent);
             turn = 0;
             StartCoroutine (DelayEndOfCasting (0.2f,2));
 
@@ -92,9 +99,14 @@ public class InitiativeBar : MonoBehaviour {
             oponentTempIncreaseSpeed = 1;
         }
         if (ButtonCards.instance.oponentCards != null && p.value == p.minValue) {
-            ButtonCards b = new ButtonCards ();
-            b.OponetCallButtonEffect ();
+            ButtonCards.instance.OponetCallButtonEffect ();
         }
+    }
+
+
+    public void ResettingCharacterValues (Monsters p) {
+        p.attack = 0;
+        p.defense = 0;
     }
 
     public void Initiative () {

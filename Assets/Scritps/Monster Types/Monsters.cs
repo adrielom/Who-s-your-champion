@@ -13,4 +13,5 @@ public abstract class Monsters {
     public int speed { get; set; }
     public string type { get; set; }
     public int attack { get; set; }
+    public int defense { get; set; }
 }

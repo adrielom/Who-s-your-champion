@@ -8,7 +8,7 @@ public class ButtonCards : MonoBehaviour {
 
     public Cards playerCards = new Cards ();
     public Cards oponentCards = new Cards ();
-    public string cardName;
+    public string cardNamePlayer, cardNameOponent;
 
     void Awake () {
         if (instance == null)
@@ -16,31 +16,48 @@ public class ButtonCards : MonoBehaviour {
     }
 
     void Start () {
-
         playerCards.AddCardsByType (Player.instance.player.type);
-        cardName = playerCards.RandomCards ();
-        this.gameObject.GetComponentInChildren<Text> ().text = cardName;
+        InitializingCardsPlayer ();
     }
 
+    public void InitializingCardsPlayer () {
+        cardNamePlayer = playerCards.RandomCards ();
+        this.gameObject.GetComponentInChildren<Text> ().text = cardNamePlayer;
+    }
+
+    void Update () {
+    }
+
+   
     IEnumerator DelayEndOfCasting (float f, int t) {
         yield return new WaitForSeconds (f);
         InitiativeBar.instance.turn = t;
+        InitializingCardsPlayer ();
     }
 
     public void PlayerCallButtonEffect () {
-        print (cardName);
+        print ("THE PLAYER CARD IS: " + cardNamePlayer);
+        Player.instance.playerCard = cardNamePlayer;
+        cardNamePlayer = this.gameObject.GetComponentInChildren<Text> ().name;
         Player.instance.player.canMove = true;
-        StartCoroutine (DelayEndOfCasting (0.2f, 1));
+        StartCoroutine (DelayEndOfCasting (0.4f, 1));
+        
+    }
 
-
+    public void CallingPlayerCardEffect () {
+        playerCards.GetCardEffect (Player.instance.player, Player.instance.playerCard);
     }
 
     public void OponetCallButtonEffect () {
         oponentCards.AddCardsByType (Oponent.instance.oponent.type);
-        cardName = oponentCards.RandomCards ();
-        oponentCards.GetCardEffect (Oponent.instance.oponent, Player.instance.player, cardName);
-        print (cardName);
+        cardNameOponent = oponentCards.RandomCards ();
+        print ("THE OPONENT CARD IS: " + cardNameOponent);
+        oponentCards.GetCardEffect (Oponent.instance.oponent, cardNameOponent);
         Oponent.instance.oponent.canMove = true;
+        if (Oponent.instance.oponent.attack > 0) {
+            oponentCards.DecrementingHP (Oponent.instance.oponent, Player.instance.player);
+
+        }
 
     }
 }

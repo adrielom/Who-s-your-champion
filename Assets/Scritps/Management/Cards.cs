@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -6,7 +7,8 @@ public class Cards {
 
     public string cardName { get; set; }
     public int price { get; set; }
-    public float attack { get; set; }
+    public int attack { get; set; }
+    public int defense { get; set; }
     public List<string> cards = new List<string> ();
 
     public void AddCardsByType (string characterType) {
@@ -48,74 +50,84 @@ public class Cards {
         return cards[Random.Range (0, cards.Count)];
     }
 
-    public void GetCardEffect (Monsters p, Monsters o, string s) {
-
+    public void GetCardEffect (Monsters p, string s) { 
+        Debug.Log (" -- PREVIOUS -- THE MONSTER: " + p.nameMonster + " HAS THE ATTACK: " + p.attack + " AND THE DEFENSE: " + p.defense);
         switch (s) {
             case "Attack1":
-                o.hp = Attack1 (o.hp);
+                p.attack = Attack1 ();
             break;
             case "Attack2":
-                o.hp = Attack2 (o.hp);
+                p.attack = Attack2 ();
             break;
             case "Attack3":
-                o.hp = Attack3 (o.hp);
+                p.attack = Attack3 ();
             break;
             case "Defense1":
-                o.hp = Defense1 (o.hp, p.attack);
+                p.defense = Defense1 ();
             break;
             case "Defense2":
-                o.hp = Defense2 (o.hp, p.attack);
+                p.defense = Defense2 ();
             break;
             case "Defense3":
-                o.hp = Defense3 (o.hp);
+                p.defense = Defense3 ();
             break;
         }
+        Debug.Log ("THE MONSTER: " + p.nameMonster + " HAS THE ATTACK: " + p.attack + " AND THE DEFENSE: " + p.defense);
+        Debug.Log (" The cardname was : " + cardName);
 
+    }
+
+    public void DecrementingHP (Monsters p, Monsters o) {
+        Debug.Log (" IT'S TIME TO DECREASE HP. THE MONSTER'S PREVIOUS HP WAS: " + o.hp);
+        if (o.defense > 0) {
+            p.attack -= o.defense;
+            o.hp -= p.attack;
+        }
+        else {
+            o.hp -= p.attack;
+
+        }
+        Debug.Log (" THE MONSTER'S NEW HP IS: " + o.hp);
     }
 
     //---------------------------------------------------- Generic Cards ------------------------------------------------------------------
 
-    public int Attack1 (int hp) {
+    public int Attack1 () {
         cardName = "Attack1";
         attack = 1;
-        hp -= (int)attack;
-        return hp;
+        return attack;
     }
 
-    public int Attack2 (int hp) {
+    public int Attack2 () {
+        cardName = "Attack2";
         attack = 2;
-        hp -= (int)attack;
-        return hp;
+        return attack;
     }
 
-    public int Attack3 (int hp) {
+    public int Attack3 () {
         cardName = "Attack3";
         attack = 3;
-        hp -= (int)attack;
-        return hp;
+        return attack;
     }
 
-    public int Defense1 (int hp, int o) {
+    public int Defense1 () {
         cardName = "Defense1";
-        attack = o;
-        attack *= .25f;
-        hp -= (int)attack;
-        return hp;
+        defense = 1;
+        return defense;
     }
 
-    public int Defense2 (int hp, int o) {
+    public int Defense2 () {
         cardName = "Defense2";
-        attack = o;
-        attack *= .5f;
-        hp -= (int)attack;
-        return hp;
+        defense = 2;
+        return defense;
     }
 
-    public int Defense3 (int hp) {
+    public int Defense3 () {
         cardName = "Defense3";
-        return hp;
+        defense = 3;
+        return defense;
     }
 
     //----------------------------------------------------------- End of Generic Cards -----------------------------------------------------
- 
+
 }

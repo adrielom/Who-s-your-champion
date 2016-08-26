@@ -8,14 +8,14 @@ public class Player : MonoBehaviour {
     public static Player instance = null;
     public Monsters player;
     public Text hp;
+    public string playerCard;
 
     void Awake () {
         if (instance == null) {
             instance = this;
         }
         CheckingSelectedCharacter ();
-        print ("player: " + player.nameMonster);
-        print (player.hp);
+        print ("player: " + player.nameMonster + " and THE HP IS: " + player.hp);
 
     }
 

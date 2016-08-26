@@ -16,8 +16,7 @@ public class Oponent : MonoBehaviour {
         }
         RandomType ();
         CheckingSelectedCharacter ();
-        print ("Oponent: " + oponent.nameMonster);
-        print (oponent.hp);
+        print ("Oponent: " + oponent.nameMonster + " and THE HP IS: "+ oponent.hp);
 
     }
 
