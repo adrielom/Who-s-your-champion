@@ -40,7 +40,7 @@ public class ButtonCards : MonoBehaviour {
         Player.instance.playerCard = cardNamePlayer;
         cardNamePlayer = this.gameObject.GetComponentInChildren<Text> ().name;
         Player.instance.player.canMove = true;
-        StartCoroutine (DelayEndOfCasting (0.4f, 1));
+        StartCoroutine (DelayEndOfCasting (0.6f, 1));
         
     }
 

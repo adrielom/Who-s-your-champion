@@ -43,21 +43,20 @@ public class InitiativeBar : MonoBehaviour {
     }
 
     public void CheckingFirstToMove () {
-        if (Player.instance.player.speed > Oponent.instance.oponent.speed) {
+        if (Player.instance.player.speed >= Oponent.instance.oponent.speed) {
             turn = 1;
         }
-        else if (Oponent.instance.oponent.speed > Player.instance.player.speed) {
+        else {
             turn = 2;
         }
-        else {
-            turn = Random.Range (1, 3);
-        }
+        
         button.SetActive (false);
     }
 
     public void CastingEffectPlayer (Slider p, bool m) {
 
-        if (p.value >= 80  && p.value <= 81 && m == false) {
+        if (p.value >= 80  && p.value <= 80.8f && m == false) {
+            print ("------------------------------------------------------------------------------------------------------------------------");
             ResettingCharacterValues (Player.instance.player);
             turn = 0;
             button.SetActive (true);
@@ -67,9 +66,7 @@ public class InitiativeBar : MonoBehaviour {
             button.SetActive (false);
             playerTempIncreaseSpeed = 2;
             turn = 1;
-            if (totalOfTurns >= 2) {
-                ButtonCards.instance.cardNamePlayer = ButtonCards.instance.playerCards.RandomCards ();
-            }   
+            
         }
         else if (p.value > p.minValue && p.value < 1) {
             Player.instance.player.canMove = false;
@@ -85,6 +82,7 @@ public class InitiativeBar : MonoBehaviour {
     public void CastingEffectOponent (Slider p, bool m) {
         
         if (p.value >= 80 && p.value < 80.2f && m == false) {
+            print ("------------------------------------------------------------------------------------------------------------------------");
             ResettingCharacterValues (Oponent.instance.oponent);
             turn = 0;
             StartCoroutine (DelayEndOfCasting (0.2f,2));

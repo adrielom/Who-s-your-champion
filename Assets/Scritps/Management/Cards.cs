@@ -80,7 +80,13 @@ public class Cards {
     public void DecrementingHP (Monsters p, Monsters o) {
         Debug.Log (" IT'S TIME TO DECREASE HP. THE MONSTER'S PREVIOUS HP WAS: " + o.hp);
         if (o.defense > 0) {
-            p.attack -= o.defense;
+            if (o.defense >= p.attack) {
+                p.defense -= p.attack;
+                p.attack = 0;
+            }
+            else {
+                p.attack -= o.defense;
+            }
             o.hp -= p.attack;
         }
         else {
